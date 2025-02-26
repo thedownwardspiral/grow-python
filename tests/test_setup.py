@@ -2,8 +2,9 @@ import mock
 
 
 def test_moisture_setup(gpiod, gpiodevice, smbus2):
-    from grow.moisture import Moisture
     from datetime import timedelta
+
+    from grow.moisture import Moisture
 
     ch1 = Moisture(channel=1)
     ch2 = Moisture(channel=2)

@@ -1,13 +1,12 @@
-import time
+import atexit
 import select
 import threading
+import time
 from datetime import timedelta
-import atexit
 
 import gpiodevice
 from gpiod import LineSettings
-from gpiod.line import Edge, Bias
-
+from gpiod.line import Bias, Edge
 
 MOISTURE_1_PIN = 23
 MOISTURE_2_PIN = 8
