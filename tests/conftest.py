@@ -26,12 +26,24 @@ def cleanup():
 
 
 @pytest.fixture(scope='function', autouse=False)
-def GPIO():
+def gpiod():
     """Mock gpiod module."""
-    gpiod = mock.MagicMock()
-    sys.modules['gpiod'] = gpiod
-    yield gpiod
-    del sys.modules['gpiod']
+    sys.modules["gpiod"] = mock.Mock()
+    sys.modules["gpiod.line"] = mock.Mock()
+    yield sys.modules["gpiod"]
+    del sys.modules["gpiod.line"]
+    del sys.modules["gpiod"]
+
+
+@pytest.fixture(scope="function", autouse=False)
+def gpiodevice():
+    gpiodevice = mock.Mock()
+    gpiodevice.get_pins_for_platform.return_value = [(mock.Mock(), 0), (mock.Mock(), 0), (mock.Mock(), 0)]
+    gpiodevice.get_pin.return_value = (mock.Mock(), 0)
+
+    sys.modules["gpiodevice"] = gpiodevice
+    yield gpiodevice
+    del sys.modules["gpiodevice"]
 
 
 @pytest.fixture(scope='function', autouse=False)
