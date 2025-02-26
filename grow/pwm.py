@@ -1,5 +1,5 @@
 import time
-from threading import Thread
+from threading import Event, Thread
 
 import gpiod
 import gpiodevice
@@ -11,19 +11,18 @@ OUTL = gpiod.LineSettings(direction=Direction.OUTPUT, output_value=Value.INACTIV
 class PWM:
     _pwms: list = []
     _t_pwm: Thread = None
-    _pwm_running: bool = False
+    _t_pwm_event: Event = Event()
 
     @staticmethod
     def start_thread():
         if PWM._t_pwm is None:
-            PWM._pwm_running = True
             PWM._t_pwm = Thread(target=PWM._run)
             PWM._t_pwm.start()
 
     @staticmethod
     def stop_thread():
         if PWM._t_pwm is not None:
-            PWM._pwm_running = False
+            PWM._t_pwm_event.set()
             PWM._t_pwm.join()
             PWM._t_pwm = None
 
@@ -34,13 +33,13 @@ class PWM:
     @staticmethod
     def _remove(pwm):
         index = PWM._pwms.index(pwm)
-        del PWM._pwms[index]
+        PWM._pwms.pop(index)
         if len(PWM._pwms) == 0:
             PWM.stop_thread()
 
     @staticmethod
     def _run():
-        while PWM._pwm_running:
+        while not PWM._t_pwm_event.is_set():
             PWM.run()
 
     @staticmethod
