@@ -1,3 +1,13 @@
+0.0.4
+-----
+
+* Fix wrong GPIO pin for pump2 on Raspberry Pi 5 (PIN12 -> PIN13)
+* Fix PWM thread event never cleared after stop, preventing restart
+* Fix PWM destructor crash if constructor fails midway
+* Fix Moisture destructor crash if constructor fails midway
+* Fix PWM ZeroDivisionError when frequency is zero
+* Migrate examples/monitor.py from RPi.GPIO to gpiod for button handling
+
 0.0.3
 -----
 

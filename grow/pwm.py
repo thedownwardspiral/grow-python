@@ -95,6 +95,8 @@ class PWM:
     def next(self, t):
         if not self.running:
             return
+        if self.period == 0:
+            return  # Avoid ZeroDivisionError when frequency is not set
         d = t - self.time_start
         d %= self.period
         new_state = Value.ACTIVE if d < self.duty_period else Value.INACTIVE

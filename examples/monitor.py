@@ -6,10 +6,15 @@ import sys
 import threading
 import time
 
+import select
+from datetime import timedelta
+
+import gpiodevice
 import ltr559
-import RPi.GPIO as GPIO
 import ST7735
 import yaml
+from gpiod import LineSettings
+from gpiod.line import Bias, Edge
 from fonts.ttf import RobotoMedium as UserFont
 from PIL import Image, ImageDraw, ImageFont
 
@@ -1044,12 +1049,32 @@ def main():
 
     config = Config()
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
+    # Set up buttons using gpiod
+    button_lines = []
     for pin in BUTTONS:
-        GPIO.add_event_detect(pin, GPIO.FALLING, handle_button, bouncetime=200)
+        line, offset = gpiodevice.get_pin(pin, f"grow-button-{pin}", LineSettings(
+            edge_detection=Edge.FALLING, bias=Bias.PULL_UP, debounce_period=timedelta(milliseconds=200)
+        ))
+        button_lines.append((line, offset, pin))
+
+    # Start button polling thread
+    button_poll_event = threading.Event()
+
+    def button_poll_thread():
+        poll = select.poll()
+        for line, offset, pin in button_lines:
+            poll.register(line.fd, select.POLLIN)
+        fd_to_pin = {line.fd: (line, pin) for line, offset, pin in button_lines}
+        while not button_poll_event.is_set():
+            events = poll.poll(100)  # 100ms timeout
+            for fd, event in events:
+                if event & select.POLLIN:
+                    line, pin = fd_to_pin[fd]
+                    line.read_edge_events()  # Clear the events
+                    handle_button(pin)
+
+    button_thread = threading.Thread(target=button_poll_thread, daemon=True)
+    button_thread.start()
 
     config.load()
 
