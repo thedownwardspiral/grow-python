@@ -25,6 +25,7 @@ class PWM:
             PWM._t_pwm_event.set()
             PWM._t_pwm.join()
             PWM._t_pwm = None
+            PWM._t_pwm_event.clear()
 
     @staticmethod
     def _add(pwm):
@@ -32,7 +33,10 @@ class PWM:
 
     @staticmethod
     def _remove(pwm):
-        index = PWM._pwms.index(pwm)
+        try:
+            index = PWM._pwms.index(pwm)
+        except ValueError:
+            return  # Instance was never added (constructor failed)
         PWM._pwms.pop(index)
         if len(PWM._pwms) == 0:
             PWM.stop_thread()

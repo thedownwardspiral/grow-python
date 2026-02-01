@@ -55,6 +55,8 @@ class Moisture:
         self._thread_stop()
 
     def _thread_stop(self):
+        if not hasattr(self, "_poll_thread_event"):
+            return  # Constructor failed before thread was created
         self._poll_thread_event.set()
         self._poll_thread.join()
 
