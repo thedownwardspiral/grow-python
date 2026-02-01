@@ -26,13 +26,15 @@
 
 ## Getting Started
 
-You'll need to install the LTP305 software library and enable i2c on your Raspberry Pi.
+You'll need to install the Grow HAT software library and enable i2c on your Raspberry Pi.
+
+This library supports both Raspberry Pi 4 and Raspberry Pi 5 using the modern gpiod interface.
 
 ### Requirements
 
-#### Python 3 & pip
+#### Python 3.9+ & pip
 
-You should use Python 3, which may need installing on your Pi:
+You should use Python 3.9 or newer. On recent Raspberry Pi OS versions this is installed by default:
 
 ```
 sudo apt update
@@ -53,7 +55,7 @@ sudo raspi-config nonint do_spi 0
 The following dependencies are required:
 
 ```
-sudo apt install python3-yaml python3-smbus python3-pil python3-spidev python3-rpi.gpio
+sudo apt install python3-yaml python3-smbus python3-pil python3-spidev python3-libgpiod
 ```
 
 ### Installing the library
@@ -66,7 +68,7 @@ This will also install the display driver - ST7735 - and a driver for the light 
 
 ## Reference
 
-The Grow library includes several modules for monitoring, watering and conveying status information.
+The Grow library includes several modules for monitoring, watering and conveying status information. It uses the modern gpiod interface for GPIO access, providing compatibility with both Raspberry Pi 4 and Raspberry Pi 5.
 
 ### Moisture
 

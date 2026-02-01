@@ -43,7 +43,8 @@ text_colour = (255, 255, 255)
 back_colour = (0, 170, 170)
 
 message = "Hello, World!"
-size_x, size_y = draw.textsize(message, font)
+bbox = draw.textbbox((0, 0), message, font=font)
+size_x, size_y = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
 # Calculate text position
 x = (WIDTH - size_x) / 2

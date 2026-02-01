@@ -6,10 +6,15 @@ import sys
 import threading
 import time
 
+import select
+from datetime import timedelta
+
+import gpiodevice
 import ltr559
-import RPi.GPIO as GPIO
 import ST7735
 import yaml
+from gpiod import LineSettings
+from gpiod.line import Bias, Edge
 from fonts.ttf import RobotoMedium as UserFont
 from PIL import Image, ImageDraw, ImageFont
 
@@ -90,7 +95,8 @@ class View:
         if position not in ["A", "B", "X", "Y"]:
             raise ValueError(f"Invalid label position {position}")
 
-        text_w, text_h = self._draw.textsize(text, font=self.font)
+        bbox = self._draw.textbbox((0, 0), text, font=self.font)
+        text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
         text_h = 11
         text_w += margin * 2
         text_h += margin * 2
@@ -143,7 +149,7 @@ class View:
 
                 while (
                     len(words) > 0
-                    and font.getsize(" ".join(line + [words[0]]))[0] <= width
+                    and font.getlength(" ".join(line + [words[0]])) <= width
                 ):
                     line.append(words.pop(0))
 
@@ -161,7 +167,7 @@ class View:
                 bounds = [x2, y, x1, y + len(lines) * line_height]
 
                 for line in lines:
-                    line_width = font.getsize(line)[0]
+                    line_width = font.getlength(line)
                     x = int(x1 + (width / 2) - (line_width / 2))
                     bounds[0] = min(bounds[0], x)
                     bounds[2] = max(bounds[2], x + line_width)
@@ -222,7 +228,8 @@ class MainView(View):
         self.icon(icon_channel, (x, label_y), (200, 200, 200) if active else (64, 64, 64))
 
         # TODO: replace number text with graphic
-        tw, th = self.font.getsize(str(channel.channel))
+        bbox = self.font.getbbox(str(channel.channel))
+        tw = bbox[2] - bbox[0]
         self._draw.text(
             (x + int(math.ceil(8 - (tw / 2.0))), label_y + 1),
             str(channel.channel),
@@ -479,7 +486,8 @@ class DetailView(ChannelView):
 
         self.icon(icon_channel, (label_x, label_y), (200, 200, 200))
 
-        tw, th = self.font.getsize(str(self.channel.channel))
+        bbox = self.font.getbbox(str(self.channel.channel))
+        tw = bbox[2] - bbox[0]
         self._draw.text(
             (label_x + int(math.ceil(8 - (tw / 2.0))), label_y + 1),
             str(self.channel.channel),
@@ -1041,12 +1049,32 @@ def main():
 
     config = Config()
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
+    # Set up buttons using gpiod
+    button_lines = []
     for pin in BUTTONS:
-        GPIO.add_event_detect(pin, GPIO.FALLING, handle_button, bouncetime=200)
+        line, offset = gpiodevice.get_pin(pin, f"grow-button-{pin}", LineSettings(
+            edge_detection=Edge.FALLING, bias=Bias.PULL_UP, debounce_period=timedelta(milliseconds=200)
+        ))
+        button_lines.append((line, offset, pin))
+
+    # Start button polling thread
+    button_poll_event = threading.Event()
+
+    def button_poll_thread():
+        poll = select.poll()
+        for line, offset, pin in button_lines:
+            poll.register(line.fd, select.POLLIN)
+        fd_to_pin = {line.fd: (line, pin) for line, offset, pin in button_lines}
+        while not button_poll_event.is_set():
+            events = poll.poll(100)  # 100ms timeout
+            for fd, event in events:
+                if event & select.POLLIN:
+                    line, pin = fd_to_pin[fd]
+                    line.read_edge_events()  # Clear the events
+                    handle_button(pin)
+
+    button_thread = threading.Thread(target=button_poll_thread, daemon=True)
+    button_thread.start()
 
     config.load()
 
