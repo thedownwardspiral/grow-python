@@ -2,20 +2,19 @@
 import logging
 import math
 import pathlib
+import select
 import sys
 import threading
 import time
-
-import select
 from datetime import timedelta
 
 import gpiodevice
 import ltr559
 import ST7735
 import yaml
+from fonts.ttf import RobotoMedium as UserFont
 from gpiod import LineSettings
 from gpiod.line import Bias, Edge
-from fonts.ttf import RobotoMedium as UserFont
 from PIL import Image, ImageDraw, ImageFont
 
 from grow import Piezo
