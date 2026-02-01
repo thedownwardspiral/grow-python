@@ -32,7 +32,7 @@ curl -sSL https://get.pimoroni.com/grow | bash
 * Install dependencies:
 
 ```
-sudo apt install python3-setuptools python3-pip python3-yaml python3-smbus python3-pil python3-spidev python3-rpi.gpio
+sudo apt install python3-setuptools python3-pip python3-yaml python3-smbus python3-pil python3-spidev python3-libgpiod
 ```
 
 * Run `sudo pip3 install growhat`
@@ -57,6 +57,16 @@ You should read the following to get up and running with our monitoring script:
 * Discord - https://discord.gg/hr93ByC
 
 # Changelog
+0.0.3
+-----
+
+* Port to gpiod/gpiodevice for Raspberry Pi 5 support
+* Migrate to Pillow 11.x compatible API (Debian Trixie)
+* Require Python 3.9+ (drop Python 3.7/3.8 support)
+* Add Python 3.12 support
+* Use stdlib unittest.mock instead of mock package
+* Fix uninitialized _speed attribute in Pump class
+
 0.0.2
 -----
 
