@@ -14,7 +14,7 @@ MOISTURE_3_PIN = 25
 MOISTURE_INT_PIN = 4
 
 
-class Moisture(object):
+class Moisture:
     """Grow moisture sensor driver."""
 
     def __init__(self, channel=1, wet_point=None, dry_point=None):

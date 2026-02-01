@@ -21,7 +21,7 @@ PLATFORMS = {
 global_lock = threading.Lock()
 
 
-class Pump(object):
+class Pump:
     """Grow pump driver."""
 
     PINS = None
@@ -47,6 +47,7 @@ class Pump(object):
         atexit.register(pwm.PWM.stop_thread)
 
         self._timeout = None
+        self._speed = 0
 
     def set_speed(self, speed):
         """Set pump speed (PWM duty cycle)."""

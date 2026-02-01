@@ -7,7 +7,7 @@ name = "growhat"
 dynamic = ["version", "readme"]
 description = "Grow HAT Mini. A plant valet add-on for the Raspberry Pi"
 license = {file = "LICENSE"}
-requires-python = ">= 3.7"
+requires-python = ">= 3.9"
 authors = [
     { name = "Philip Howard", email = "phil@pimoroni.com" },
     { name = "Paul Beech", email = "paul@pimoroni.com" },
@@ -25,11 +25,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development",
     "Topic :: Software Development :: Libraries",

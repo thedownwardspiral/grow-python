@@ -19,3 +19,8 @@ library/debian/
 .pytest_cache
 .tox
 .vscode/
+.env
+pimoroni/
+
+CLAUDE.md
+SECURITY_REVIEW.md
