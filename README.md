@@ -57,6 +57,19 @@ You should read the following to get up and running with our monitoring script:
 * Discord - https://discord.gg/hr93ByC
 
 # Changelog
+0.0.4
+-----
+
+* Fix wrong GPIO pin for pump2 on Raspberry Pi 5 (PIN12 -> PIN13)
+* Fix PWM thread event never cleared after stop, preventing restart
+* Fix PWM destructor crash if constructor fails midway
+* Fix Moisture destructor crash if constructor fails midway
+* Fix PWM ZeroDivisionError when frequency is zero
+* Migrate examples/monitor.py from RPi.GPIO to gpiod for button handling
+* Fix PWM initial state mismatch with GPIO configuration
+* Fix PWM thread busy-wait consuming 100% CPU
+* Fix PWM stop not setting GPIO to inactive state
+
 0.0.3
 -----
 
