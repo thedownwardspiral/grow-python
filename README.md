@@ -2,10 +2,15 @@
 
 Designed as a tiny valet for your plants, Grow HAT mini will monitor the soil moiture for up to 3 plants, water them with tiny pumps, and show you their health on its small but informative screen. Learn more - https://shop.pimoroni.com/products/grow
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/pimoroni/grow-python/test.yml?branch=main)](https://github.com/pimoroni/grow-python/actions/workflows/test.yml)
-[![Coverage Status](https://coveralls.io/repos/github/pimoroni/grow-python/badge.svg?branch=master)](https://coveralls.io/github/pimoroni/grow-python?branch=master)
-[![PyPi Package](https://img.shields.io/pypi/v/growhat.svg)](https://pypi.python.org/pypi/growhat)
-[![Python Versions](https://img.shields.io/pypi/pyversions/growhat.svg)](https://pypi.python.org/pypi/growhat)
+## Supported Platforms
+
+| Platform | OS | Status |
+|----------|-----|--------|
+| Raspberry Pi 4 | Debian Trixie | ✅ Tested |
+| Raspberry Pi 4 | Debian Bookworm | ✅ Supported |
+| Raspberry Pi 5 | Debian Bookworm | ✅ Supported |
+
+**Requirements:** Python 3.9+, gpiod 2.1.3+
 
 # Installing
 
@@ -49,6 +54,28 @@ You should read the following to get up and running with our monitoring script:
 
 * [Using and configuring monitor.py](examples/README.md)
 * [Setting up monitor.py as a service](service/README.md)
+
+## Testing
+
+Run unit tests:
+```bash
+python -m pytest tests/ -v
+```
+
+Run QA checks:
+```bash
+ruff check .
+isort --check .
+codespell .
+```
+
+## Development Setup
+
+```bash
+python3 -m venv pimoroni
+./pimoroni/bin/pip install -e .
+./pimoroni/bin/pip install pytest pytest-cov ruff isort codespell
+```
 
 ## Help & Support
 
