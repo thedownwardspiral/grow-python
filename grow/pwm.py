@@ -45,6 +45,7 @@ class PWM:
     def _run():
         while not PWM._t_pwm_event.is_set():
             PWM.run()
+            time.sleep(0.001)  # 1ms sleep to reduce CPU usage
 
     @staticmethod
     def run():
@@ -58,7 +59,7 @@ class PWM:
         self.period = 0
         self.running = False
         self.time_start = None
-        self.state = Value.ACTIVE
+        self.state = Value.INACTIVE  # Match GPIO initial output_value
 
         self.set_frequency(frequency)
         self.set_duty_cycle(duty_cycle)
@@ -106,6 +107,8 @@ class PWM:
 
     def stop(self):
         self.running = False
+        self.lines.set_value(self.offset, Value.INACTIVE)
+        self.state = Value.INACTIVE
 
     def __del__(self):
         PWM._remove(self)

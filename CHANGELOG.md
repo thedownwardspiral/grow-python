@@ -7,6 +7,9 @@
 * Fix Moisture destructor crash if constructor fails midway
 * Fix PWM ZeroDivisionError when frequency is zero
 * Migrate examples/monitor.py from RPi.GPIO to gpiod for button handling
+* Fix PWM initial state mismatch with GPIO configuration
+* Fix PWM thread busy-wait consuming 100% CPU
+* Fix PWM stop not setting GPIO to inactive state
 
 0.0.3
 -----
