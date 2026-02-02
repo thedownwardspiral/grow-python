@@ -30,19 +30,9 @@ Then ensure your virtual environment has access to system packages by using `--s
 
 # Installing
 
-You're best using the "One-line" install method.
+## Install and configure dependencies from GitHub:
 
-## One-line (Installs from GitHub)
-
-```
-curl -sSL https://get.pimoroni.com/grow | bash
-```
-
-**Note** report issues with one-line installer here: https://github.com/pimoroni/get
-
-## Or... Install and configure dependencies from GitHub:
-
-* `git clone https://github.com/pimoroni/grow-python`
+* `git clone https://github.com/thedownwardspiral/grow-python`
 * `cd grow-python`
 * `./install.sh -u`
 
