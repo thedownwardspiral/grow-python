@@ -9,21 +9,46 @@ import gpiodevice
 from . import pwm
 
 PLATFORMS = {
-    "Raspberry Pi 5": {"piezo": ("PIN33", pwm.OUTL)},
-    "Raspberry Pi 4": {"piezo": ("GPIO13", pwm.OUTL)},
-    "Raspberry Pi 3": {"piezo": ("GPIO13", pwm.OUTL)},
-    "Raspberry Pi 2": {"piezo": ("GPIO13", pwm.OUTL)},
-    "Raspberry Pi": {"piezo": ("GPIO13", pwm.OUTL)},
-    "Raspberry Pi Zero 2": {"piezo": ("GPIO13", pwm.OUTL)},
-    "Raspberry Pi Zero": {"piezo": ("GPIO13", pwm.OUTL)},
+    "Raspberry Pi 5": "PIN33",
+    "Raspberry Pi 4": "GPIO13",
+    "Raspberry Pi 3": "GPIO13",
+    "Raspberry Pi 2": "GPIO13",
+    "Raspberry Pi": "GPIO13",
+    "Raspberry Pi Zero 2": "GPIO13",
+    "Raspberry Pi Zero": "GPIO13",
 }
+
+# Detected platform piezo pin (cached after first detection)
+_piezo_pin = None
+
+
+def _get_piezo_pin():
+    """Detect platform and return the piezo pin name."""
+    global _piezo_pin
+    if _piezo_pin is not None:
+        return _piezo_pin
+
+    # Try to find the platform by checking which one matches
+    for platform_name, pin in PLATFORMS.items():
+        try:
+            chip = gpiodevice.find_chip_by_platform(platform_name)
+            if chip is not None:
+                _piezo_pin = pin
+                return _piezo_pin
+        except Exception:
+            continue
+
+    # Fallback to GPIO naming (works for Pi 2/3/4/Zero)
+    _piezo_pin = "GPIO13"
+    return _piezo_pin
 
 
 class Piezo():
     def __init__(self, gpio_pin=None):
 
         if gpio_pin is None:
-            gpio_pin = gpiodevice.get_pins_for_platform(PLATFORMS)[0]
+            pin_name = _get_piezo_pin()
+            gpio_pin = gpiodevice.get_pin(pin_name, "piezo", pwm.OUTL)
         elif isinstance(gpio_pin, str):
             gpio_pin = gpiodevice.get_pin(gpio_pin, "piezo", pwm.OUTL)
 

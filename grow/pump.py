@@ -13,14 +13,38 @@ PUMP_PWM_FREQ = 10000
 PUMP_MAX_DUTY = 0.9
 
 PLATFORMS = {
-    "Raspberry Pi 5": {"pump1": ("PIN11", pwm.OUTL), "pump2": ("PIN13", pwm.OUTL), "pump3": ("PIN15", pwm.OUTL)},
-    "Raspberry Pi 4": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
-    "Raspberry Pi 3": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
-    "Raspberry Pi 2": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
-    "Raspberry Pi": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
-    "Raspberry Pi Zero 2": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
-    "Raspberry Pi Zero": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
+    "Raspberry Pi 5": ["PIN11", "PIN13", "PIN15"],
+    "Raspberry Pi 4": ["GPIO17", "GPIO27", "GPIO22"],
+    "Raspberry Pi 3": ["GPIO17", "GPIO27", "GPIO22"],
+    "Raspberry Pi 2": ["GPIO17", "GPIO27", "GPIO22"],
+    "Raspberry Pi": ["GPIO17", "GPIO27", "GPIO22"],
+    "Raspberry Pi Zero 2": ["GPIO17", "GPIO27", "GPIO22"],
+    "Raspberry Pi Zero": ["GPIO17", "GPIO27", "GPIO22"],
 }
+
+# Detected platform pins (cached after first detection)
+_platform_pins = None
+
+
+def _get_platform_pins():
+    """Detect platform and return the list of pump pin names."""
+    global _platform_pins
+    if _platform_pins is not None:
+        return _platform_pins
+
+    # Try to find the platform by checking which one matches
+    for platform_name, pins in PLATFORMS.items():
+        try:
+            chip = gpiodevice.find_chip_by_platform(platform_name)
+            if chip is not None:
+                _platform_pins = pins
+                return _platform_pins
+        except Exception:
+            continue
+
+    # Fallback to GPIO naming (works for Pi 2/3/4/Zero)
+    _platform_pins = ["GPIO17", "GPIO27", "GPIO22"]
+    return _platform_pins
 
 
 global_lock = threading.Lock()
@@ -28,8 +52,6 @@ global_lock = threading.Lock()
 
 class Pump:
     """Grow pump driver."""
-
-    PINS = None
 
     def __init__(self, channel=1):
         """Create a new pump.
@@ -39,11 +61,11 @@ class Pump:
         :param channel: One of 1, 2 or 3.
 
         """
+        pins = _get_platform_pins()
+        pin_name = pins[channel - 1]
 
-        if Pump.PINS is None:
-            Pump.PINS = gpiodevice.get_pins_for_platform(PLATFORMS)
-
-        self._gpio_pin = Pump.PINS[channel - 1]
+        # Get the GPIO pin using gpiodevice.get_pin (works around get_pins_for_platform bug)
+        self._gpio_pin = gpiodevice.get_pin(pin_name, f"pump{channel}", pwm.OUTL)
 
         self._pwm = pwm.PWM(self._gpio_pin, PUMP_PWM_FREQ)
         self._pwm.start(0)
