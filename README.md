@@ -9,8 +9,19 @@ Designed as a tiny valet for your plants, Grow HAT mini will monitor the soil mo
 | Raspberry Pi 4 | Debian Trixie | ✅ Tested |
 | Raspberry Pi 4 | Debian Bookworm | ✅ Supported |
 | Raspberry Pi 5 | Debian Bookworm | ✅ Supported |
+| Raspberry Pi Zero | Debian Bookworm | ✅ Supported (see note) |
 
 **Requirements:** Python 3.9+, gpiod 2.1.3+
+
+### Raspberry Pi Zero Note
+
+The Pi Zero uses ARMv6 architecture which lacks pre-built wheels for some Python packages. You must install these system packages before running the installer:
+
+```bash
+sudo apt install python3-numpy python3-pil
+```
+
+Then ensure your virtual environment has access to system packages by using `--system-site-packages` when creating it (the installer does this automatically).
 
 # Installing
 
