@@ -44,11 +44,16 @@ curl -sSL https://get.pimoroni.com/grow | bash
 
 * `git clone https://github.com/pimoroni/grow-python`
 * `cd grow-python`
-* `sudo ./install.sh`
+* `./install.sh -u`
+
+The `-u` flag installs from local source code rather than PyPI. **This is recommended** because the PyPI version may be outdated and lack important fixes including:
+- Platform support for Pi 1, Pi 2, Pi 3, Pi Zero, and Pi Zero 2
+- Fixes for GPIO handling on various Pi models
+- Required dependencies like `gpiodevice`
 
 **Note** Raspbian Lite users may first need to install git: `sudo apt install git`
 
-## Or... Install from PyPi and configure manually:
+## Or... Install from PyPi (not recommended):
 
 * Install dependencies:
 
