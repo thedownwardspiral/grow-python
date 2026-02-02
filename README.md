@@ -96,6 +96,9 @@ python3 -m venv pimoroni
 * Fix PWM initial state mismatch with GPIO configuration
 * Fix PWM thread busy-wait consuming 100% CPU
 * Fix PWM stop not setting GPIO to inactive state
+* Update ST7735 import to use modern lowercase module name
+* Replace deprecated fonts.ttf with direct font_roboto import (removes pkg_resources deprecation warning)
+* Add setuptools to install.sh dependencies
 
 0.0.3
 -----

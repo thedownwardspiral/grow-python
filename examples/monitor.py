@@ -10,9 +10,9 @@ from datetime import timedelta
 
 import gpiodevice
 import ltr559
-import ST7735
+import st7735
 import yaml
-from fonts.ttf import RobotoMedium as UserFont
+from font_roboto import RobotoMedium as UserFont
 from gpiod import LineSettings
 from gpiod.line import Bias, Edge
 from PIL import Image, ImageDraw, ImageFont
@@ -1022,7 +1022,7 @@ def main():
 
 
     # Set up the ST7735 SPI Display
-    display = ST7735.ST7735(
+    display = st7735.ST7735(
         port=0, cs=1, dc=9, backlight=12, rotation=270, spi_speed_hz=80000000
     )
     display.begin()

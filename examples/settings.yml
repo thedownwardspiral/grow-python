@@ -5,6 +5,7 @@ channel1:
   pump_speed: 0.5
   pump_time: 0.5
   warn_level: 0.2
+  water_level: 0.5
   watering_delay: 60
   wet_point: 3
 channel2:
@@ -14,6 +15,7 @@ channel2:
   pump_speed: 0.5
   pump_time: 0.5
   warn_level: 0.5
+  water_level: 0.5
   watering_delay: 60
   wet_point: 3
 channel3:
@@ -23,10 +25,11 @@ channel3:
   pump_speed: 0.5
   pump_time: 0.5
   warn_level: 0.4
+  water_level: 0.5
   watering_delay: 60
   wet_point: 3
 general:
   alarm_enable: true
   alarm_interval: 2
-  light_level_low: 4.0
   black_screen_when_light_low: false
+  light_level_low: 4.0

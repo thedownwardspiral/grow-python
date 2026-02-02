@@ -199,7 +199,7 @@ printf "%s Python Library: Installer\n\n" $LIBRARY_NAME
 
 inform "Checking Dependencies. Please wait..."
 
-pip_pkg_install toml
+pip_pkg_install toml setuptools
 
 CONFIG_VARS=`$PYTHON - <<EOF
 import toml

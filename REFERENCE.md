@@ -55,7 +55,7 @@ sudo raspi-config nonint do_spi 0
 The following dependencies are required:
 
 ```
-sudo apt install python3-yaml python3-smbus python3-pil python3-spidev python3-libgpiod
+sudo apt install python3-yaml python3-smbus python3-pil python3-spidev python3-libgpiod python3-setuptools
 ```
 
 ### Installing the library
@@ -64,7 +64,9 @@ sudo apt install python3-yaml python3-smbus python3-pil python3-spidev python3-l
 python3 -m pip install growhat
 ```
 
-This will also install the display driver - ST7735 - and a driver for the light sensor - LTR559.
+This will also install the display driver - st7735 - and a driver for the light sensor - LTR559.
+
+**Note:** When importing the display driver in your code, use lowercase: `import st7735` (not `ST7735`).
 
 ## Reference
 
@@ -277,7 +279,9 @@ The ST7735 display on Grow is 160x80 pixels and a great way to convey current wa
 The display must be set up like so:
 
 ```python
-display = ST7735.ST7735(
+import st7735
+
+display = st7735.ST7735(
     port=0,
     cs=1,               # Chip select 1 (BCM )
     dc=9,               # BCM 9 is the data/command pin
