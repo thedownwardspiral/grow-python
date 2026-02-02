@@ -28,7 +28,12 @@
 
 You'll need to install the Grow HAT software library and enable i2c on your Raspberry Pi.
 
-This library supports both Raspberry Pi 4 and Raspberry Pi 5 using the modern gpiod interface.
+This library supports all Raspberry Pi models (Pi 1, Pi 2, Pi 3, Pi 4, Pi 5, Pi Zero, and Pi Zero 2) using the modern gpiod interface.
+
+**Note for Pi 1 and Pi Zero (ARMv6):** These platforms require additional system packages due to lack of pip wheel support:
+```bash
+sudo apt install python3-numpy python3-pil
+```
 
 ### Requirements
 
@@ -70,7 +75,7 @@ This will also install the display driver - st7735 - and a driver for the light 
 
 ## Reference
 
-The Grow library includes several modules for monitoring, watering and conveying status information. It uses the modern gpiod interface for GPIO access, providing compatibility with both Raspberry Pi 4 and Raspberry Pi 5.
+The Grow library includes several modules for monitoring, watering and conveying status information. It uses the modern gpiod interface for GPIO access, providing compatibility with all Raspberry Pi models.
 
 ### Moisture
 

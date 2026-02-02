@@ -1,3 +1,11 @@
+0.0.5
+-----
+
+* Add platform support for Raspberry Pi 1, Pi 2, Pi 3, Pi Zero, and Pi Zero 2
+* Work around gpiodevice.get_pins_for_platform bug that caused "GPIO busy" errors on Pi Zero
+* Fix pdoc documentation generation failing due to local source import
+* Document ARMv6 system package requirements (Pi 1, Pi Zero need python3-numpy, python3-pil)
+
 0.0.4
 -----
 
