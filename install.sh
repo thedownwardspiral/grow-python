@@ -300,7 +300,8 @@ printf "\n"
 if confirm "Would you like to generate documentation?"; then
 	pip_pkg_install pdoc
 	printf "Generating documentation.\n"
-	$PYTHON -m pdoc $MODULE_NAME -o "$RESOURCES_DIR/docs" > /dev/null
+	# Run pdoc from a temp directory to avoid importing local source instead of installed package
+	(cd /tmp && $PYTHON -m pdoc $MODULE_NAME -o "$RESOURCES_DIR/docs") > /dev/null
 	if [ $? -eq 0 ]; then
 		inform "Documentation saved to $RESOURCES_DIR/docs"
 		success "Done!"
