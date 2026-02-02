@@ -11,6 +11,11 @@ from . import pwm
 PLATFORMS = {
     "Raspberry Pi 5": {"piezo": ("PIN33", pwm.OUTL)},
     "Raspberry Pi 4": {"piezo": ("GPIO13", pwm.OUTL)},
+    "Raspberry Pi 3": {"piezo": ("GPIO13", pwm.OUTL)},
+    "Raspberry Pi 2": {"piezo": ("GPIO13", pwm.OUTL)},
+    "Raspberry Pi": {"piezo": ("GPIO13", pwm.OUTL)},
+    "Raspberry Pi Zero 2": {"piezo": ("GPIO13", pwm.OUTL)},
+    "Raspberry Pi Zero": {"piezo": ("GPIO13", pwm.OUTL)},
 }
 
 

@@ -15,6 +15,11 @@ PUMP_MAX_DUTY = 0.9
 PLATFORMS = {
     "Raspberry Pi 5": {"pump1": ("PIN11", pwm.OUTL), "pump2": ("PIN13", pwm.OUTL), "pump3": ("PIN15", pwm.OUTL)},
     "Raspberry Pi 4": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
+    "Raspberry Pi 3": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
+    "Raspberry Pi 2": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
+    "Raspberry Pi": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
+    "Raspberry Pi Zero 2": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
+    "Raspberry Pi Zero": {"pump1": ("GPIO17", pwm.OUTL), "pump2": ("GPIO27", pwm.OUTL), "pump3": ("GPIO22", pwm.OUTL)},
 }
 
 
